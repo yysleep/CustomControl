@@ -5,10 +5,12 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="red">#f9070f</color>
-    <color name="yellow">#f9f507</color>
+    <color name="yellow">#d2ffd800</color>
     <color name="blue">#0744f9</color>
     <color name="green">#59df05</color>
     <color name="gray">#d1d1d1</color>
     <color name="purple">#aa0fd6</color>
     <color name="white">#ffffff</color>
+
+    <color name="cloudGray">#e2e2e2</color>
 </resources>

@@ -7,12 +7,18 @@
 
     <include layout="@layout/include_toolbar" />
 
-    <com.sleep.yy.customcontrol.geometry.GeometryView
-        android:id="@+id/pie_v"
+    <com.sleep.yy.customcontrol.weather.WeatherView
+        android:id="@+id/weather_v"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:layout_marginTop="36dp"
-        android:gravity="center" />
+        android:layout_marginTop="36dp" />
+
+    <Button
+        android:id="@+id/weather_btn"
+        android:text="开始动画"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 
 </LinearLayout>

@@ -24,8 +24,9 @@
         </activity>
         <activity android:name=".circular.CircularProgressActivity" />
         <activity android:name=".pie.PieChartActivity" />
-        <activity android:name=".geometry.GeometryActivity"/>
-        <activity android:name=".camera.CameraActivity"/>
+        <activity android:name=".geometry.GeometryActivity" />
+        <activity android:name=".camera.CameraActivity" />
+        <activity android:name=".weather.WeatherActivity" />
     </application>
 
 </manifest>
