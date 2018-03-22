@@ -238,7 +238,7 @@ public class WeatherView extends View {
     }
 
     public void setRectRotate(float rotate) {
-        mRectRotate = rotate > 0 ? rotate : 0;
+        mRectRotate = rotate;
         invalidate();
     }
 
@@ -300,9 +300,9 @@ public class WeatherView extends View {
         ObjectAnimator sunEnlarge01 = ObjectAnimator.ofFloat(this, "sunRadius",  250);
         sunEnlarge01.setDuration(200);
 
-        ObjectAnimator sunRect = ObjectAnimator.ofFloat(this, "sunRect", 210, 240);
-        sunRect.setInterpolator(new LinearInterpolator());
-        sunRect.setDuration(100);
+        ObjectAnimator sunRect = ObjectAnimator.ofFloat(this, "sunRect", 0, 240);
+        //sunRect.setInterpolator(new LinearInterpolator());
+        sunRect.setDuration(200);
 
         ObjectAnimator rectRotateAnimator = ObjectAnimator.ofFloat(this, "rectRotate", 360);
         rectRotateAnimator.setDuration(30000);
