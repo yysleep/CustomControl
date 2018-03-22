@@ -2,6 +2,7 @@ package com.sleep.yy.customcontrol.weather;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
@@ -12,6 +13,7 @@ import android.graphics.Shader;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 
 import com.sleep.yy.customcontrol.R;
 import com.sleep.yy.customcontrol.util.LogUtil;
@@ -32,6 +34,7 @@ public class WeatherView extends View {
 
     private Paint mSunRingPaint;
     private Paint mSunPaint;
+    private Paint mSunRectPaint;
     private Point mSunPoint;
     private Path mSunPath;
 
@@ -45,7 +48,8 @@ public class WeatherView extends View {
     private float mSunRing;
     private float mSweepAngle;
     private float mStartAngle;
-    private float mRingRotate;
+    private float mSunRect;
+    private float mRectRotate;
 
 
     private AnimatorSet mAnimatorSet;
@@ -68,8 +72,15 @@ public class WeatherView extends View {
     }
 
     private void init() {
-        mCloudPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCloudPoint = new Point(500, 300);
+        mSunPoint = new Point(450, 300);
+
+        mSunPath = new Path();
+        mSunPath.setFillType(Path.FillType.EVEN_ODD);
+
+        mCloudPath = new Path();
+
+        mCloudPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCloudPaint.setShader(new LinearGradient(mCloudPoint.x - 200, mCloudPoint.y + 100,
                 mCloudPoint.x + 200, mCloudPoint.y,
                 getResources().getColor(R.color.white), getResources().getColor(R.color.cloudGray),
@@ -77,18 +88,19 @@ public class WeatherView extends View {
 
 
         mSunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
         mSunPaint.setColor(getResources().getColor(R.color.yellow));
-        mSunPoint = new Point(450, 300);
-        mSunPath = new Path();
-        mSunPath.setFillType(Path.FillType.EVEN_ODD);
+
+        mSunRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mSunRectPaint.setShader(new LinearGradient(mSunPoint.x - 250, mSunPoint.y - 250,
+                mSunPoint.x + 250, mSunPoint.y + 250,
+                getResources().getColor(R.color.sunStartYellow), getResources().getColor(R.color.sunEndYellow),
+                Shader.TileMode.CLAMP));
 
         mSunRingPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mSunRingPaint.setStrokeWidth(10);
+        mSunRingPaint.setStrokeCap(Paint.Cap.ROUND);
         mSunRingPaint.setColor(getResources().getColor(R.color.yellow));
         mSunRingPaint.setStyle(Paint.Style.STROKE);
 
-        mCloudPath = new Path();
     }
 
     @Override
@@ -100,22 +112,96 @@ public class WeatherView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        drawRect(canvas);
+        drawSun(canvas);
+        drawRing(canvas);
+        drawCloud(canvas);
+    }
+
+    private void drawRect(Canvas canvas) {
+        // draw rect
+        if (mRectRotate == 0 && mSunRect == 0) {
+            return;
+        }
+        if (mRectRotate < 0) {
+            mRectRotate = 0;
+        }
+        if (mSunRect < 0) {
+            mSunRect = 0;
+        }
+        canvas.save();
+        canvas.rotate(mRectRotate + 45, mSunPoint.x, mSunPoint.y);
+        canvas.drawRect(mSunPoint.x - mSunRect, mSunPoint.y - mSunRect, mSunPoint.x + mSunRect, mSunPoint.y + mSunRect, mSunRectPaint);
+        canvas.restore();
+
+        canvas.save();
+        canvas.rotate(mRectRotate, mSunPoint.x, mSunPoint.y);
+        canvas.drawRect(mSunPoint.x - mSunRect, mSunPoint.y - mSunRect, mSunPoint.x + mSunRect, mSunPoint.y + mSunRect, mSunRectPaint);
+        canvas.restore();
+    }
+
+    private void drawSun(Canvas canvas) {
         // draw sun
+        if (mSunRadius == 0 && mSunRing == 0) {
+            return;
+        }
+        if (mSunRadius < 0) {
+            mSunRadius = 0;
+        }
+        if (mSunRing < 0) {
+            mSunRing = 0;
+        }
         canvas.save();
         mSunPath.reset();
         mSunPath.addCircle(mSunPoint.x, mSunPoint.y, mSunRadius, Path.Direction.CW);
         mSunPath.addCircle(mSunPoint.x, mSunPoint.y, mSunRing, Path.Direction.CW);
         canvas.drawPath(mSunPath, mSunPaint);
         canvas.restore();
+    }
 
+    private void drawRing(Canvas canvas) {
+        // draw ring
+        if (mStartAngle == 0 && mSweepAngle == 0) {
+            return;
+        }
+        if (mStartAngle < 0) {
+            mStartAngle = 0;
+        }
+        if (mSweepAngle < 0) {
+            mSweepAngle = 0;
+        }
         canvas.save();
         mSunPath.reset();
-        canvas.rotate(mRingRotate);
-        canvas.drawArc(mSunPoint.x - 100, mSunPoint.y - 100, mSunPoint.x + 100, mSunPoint.y + 100, mStartAngle, mSweepAngle, false, mSunRingPaint);
-        canvas.drawArc(mSunPoint.x - 50, mSunPoint.y - 50, mSunPoint.x + 50, mSunPoint.y + 50, mStartAngle, mSweepAngle, false, mSunRingPaint);
+        mSunRingPaint.setStrokeWidth(30);
+        canvas.drawArc(mSunPoint.x - 200, mSunPoint.y - 200, mSunPoint.x + 200, mSunPoint.y + 200, mStartAngle / 2, mSweepAngle / 2, false, mSunRingPaint);
+        mSunRingPaint.setStrokeWidth(20);
+        canvas.drawArc(mSunPoint.x - 150, mSunPoint.y - 150, mSunPoint.x + 150, mSunPoint.y + 150, -mStartAngle, -mSweepAngle, false, mSunRingPaint);
+        mSunRingPaint.setStrokeWidth(10);
+        canvas.drawArc(mSunPoint.x - 100, mSunPoint.y - 100, mSunPoint.x + 100, mSunPoint.y + 100, mStartAngle / 2, mSweepAngle / 2, false, mSunRingPaint);
+        //canvas.drawArc(mSunPoint.x - 50, mSunPoint.y - 50, mSunPoint.x + 50, mSunPoint.y + 50, mStartAngle, mSweepAngle, false, mSunRingPaint);
         canvas.restore();
+    }
 
+    private void drawCloud(Canvas canvas) {
         // draw cloud
+        if (mRadius00 == 0 && mRadius01 == 0 && mRadius02 == 0 && mRadius03 == 0 && mRadius04 == 0) {
+            return;
+        }
+        if (mRadius00 < 0) {
+            mRadius00 = 0;
+        }
+        if (mRadius01 < 0) {
+            mRadius01 = 0;
+        }
+        if (mRadius02 < 0) {
+            mRadius02 = 0;
+        }
+        if (mRadius03 < 0) {
+            mRadius03 = 0;
+        }
+        if (mRadius04 < 0) {
+            mRadius04 = 0;
+        }
         canvas.save();
         mCloudPath.reset();
         canvas.clipRect(mCloudPoint.x - 50 - 100, mCloudPoint.y - 30 - 100, mCloudPoint.x + 210 + 80, mCloudPoint.y + 100);
@@ -127,41 +213,55 @@ public class WeatherView extends View {
         mCloudPath.addCircle(mCloudPoint.x + 160, mCloudPoint.y + 80, mRadius04, Path.Direction.CW);
         canvas.drawPath(mCloudPath, mCloudPaint);
         canvas.restore();
+    }
+
+    private void drawTest(Canvas canvas) {
 
     }
 
-    public void setSunRadius(float ring) {
-        mSunRadius = ring > 0 ? ring : 0;
-        invalidate();
-    }
-
-    public void setSunRing(float radius) {
-        mSunRing = radius > 0 ? radius : 0;
+    public void setSunRadius(float radius) {
         if (radius == 0) {
             mSunRing = 0;
         }
+        mSunRadius = radius;
         invalidate();
     }
 
-    public void setRingRotate(float rotate) {
-        mRingRotate = rotate > 0 ? rotate : 0;
+    public void setSunRect(float sunRect) {
+        mSunRect = sunRect;
+        invalidate();
+    }
+
+    public void setSunRing(float ring) {
+        mSunRing = ring;
+        invalidate();
+    }
+
+    public void setRectRotate(float rotate) {
+        mRectRotate = rotate > 0 ? rotate : 0;
         invalidate();
     }
 
     public void setSweepAngle(float sweepAngle) {
-        mSweepAngle = sweepAngle > 0 ? sweepAngle : 0;
-        mStartAngle = mSweepAngle;
+
+        /*if (sweepAngle > 180) {
+            mSweepAngle = 360 - sweepAngle;
+        } else {
+            mSweepAngle = sweepAngle;
+        }*/
+        mSweepAngle = sweepAngle;
+        mStartAngle = sweepAngle;
         invalidate();
     }
 
     public void setCloudRadius(float radius) {
         LogUtil.d(TAG, "[setCloudRadius] radius = " + radius);
         if (radius < 0) {
-            mRadius00 = 0;
-            mRadius01 = 0;
-            mRadius02 = 0;
-            mRadius03 = 0;
-            mRadius04 = 0;
+            mRadius00 = radius;
+            mRadius01 = radius;
+            mRadius02 = radius;
+            mRadius03 = radius;
+            mRadius04 = radius;
             invalidate();
             return;
         }
@@ -173,7 +273,7 @@ public class WeatherView extends View {
             mRadius02 = (radius - 40) * 3.5 > 70 ? 70 : (radius - 40) * 3.5f;
         }
         if (radius > 60) {
-            mRadius03 = (radius - 60) * 3.5 > 70 ? 70 : (radius - 60) * 3.5f;
+            mRadius03 = (radius - 60) * 3 > 60 ? 60 : (radius - 60) * 3;
         }
         if (radius > 80) {
             mRadius04 = (radius - 80) * 2.5 > 50 ? 50 : (radius - 80) * 2.5f;
@@ -188,26 +288,39 @@ public class WeatherView extends View {
             mAnimatorSet = null;
             reset();
         }
+        ObjectAnimator sunEnlarge = ObjectAnimator.ofFloat(this, "sunRadius", 250);
+        sunEnlarge.setDuration(150);
+
+        ObjectAnimator sunDisappear = ObjectAnimator.ofFloat(this, "sunRing", 250);
+        sunDisappear.setDuration(300);
+
+        ObjectAnimator ring = ObjectAnimator.ofFloat(this, "sweepAngle", 0, 180, 0);
+        ring.setDuration(500);
+
+        ObjectAnimator sunEnlarge01 = ObjectAnimator.ofFloat(this, "sunRadius",  250);
+        sunEnlarge01.setDuration(200);
+
+        ObjectAnimator sunRect = ObjectAnimator.ofFloat(this, "sunRect", 210, 240);
+        sunRect.setInterpolator(new LinearInterpolator());
+        sunRect.setDuration(100);
+
+        ObjectAnimator rectRotateAnimator = ObjectAnimator.ofFloat(this, "rectRotate", 360);
+        rectRotateAnimator.setDuration(30000);
+        rectRotateAnimator.setInterpolator(new LinearInterpolator());
+        rectRotateAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        rectRotateAnimator.setRepeatMode(ValueAnimator.RESTART);
+
         ObjectAnimator cloudAnimator = ObjectAnimator.ofFloat(this, "cloudRadius", 100);
         cloudAnimator.setDuration(800);
 
-        ObjectAnimator sunEnlarge = ObjectAnimator.ofFloat(this, "sunRadius", 250);
-        sunEnlarge.setDuration(500);
-
-        ObjectAnimator sunDisappear = ObjectAnimator.ofFloat(this, "sunRing", 250);
-        sunDisappear.setDuration(500);
-
-        ObjectAnimator ringRotate = ObjectAnimator.ofFloat(this, "ringRotate", 360);
-        ringRotate.setDuration(500);
-
-        ObjectAnimator sweepAngle = ObjectAnimator.ofFloat(this, "sweepAngle", 0, 270, 0);
-        sweepAngle.setDuration(1000);
 
         mAnimatorSet = new AnimatorSet();
-        mAnimatorSet.play(sunDisappear).after(sunEnlarge);
-        mAnimatorSet.play(sweepAngle).after(sunDisappear);
-        //mAnimatorSet.play(ringRotate).with(sweepAngle);
-        mAnimatorSet.play(cloudAnimator).after(sweepAngle);
+        mAnimatorSet.play(sunDisappear).with(sunEnlarge);
+        mAnimatorSet.play(ring).after(sunDisappear);
+        mAnimatorSet.play(sunEnlarge01).after(ring);
+        mAnimatorSet.play(sunRect).after(sunEnlarge01);
+        mAnimatorSet.play(rectRotateAnimator).after(sunRect);
+        mAnimatorSet.play(cloudAnimator).with(rectRotateAnimator);
         mAnimatorSet.start();
     }
 
@@ -216,6 +329,7 @@ public class WeatherView extends View {
         setSunRadius(-1);
         setSunRing(-1);
         setSweepAngle(-1);
-        setRingRotate(-1);
+        setSunRect(-1);
+        setRectRotate(-1);
     }
 }

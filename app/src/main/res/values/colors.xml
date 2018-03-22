@@ -13,4 +13,6 @@
     <color name="white">#ffffff</color>
 
     <color name="cloudGray">#e2e2e2</color>
+    <color name="sunStartYellow">#d2ffec1e</color>
+    <color name="sunEndYellow">#d2d49800</color>
 </resources>
