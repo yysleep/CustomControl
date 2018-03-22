@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sleep.yy.customcontrol.main.MainActivity">
+
+    <include layout="@layout/include_toolbar"/>
+
+    <com.sleep.yy.customcontrol.circular.CircularProgressView
+        android:id="@+id/circular_progress_cpv"
+        android:layout_width="100dp"
+        android:layout_gravity="center"
+        android:layout_height="200dp"
+        android:layout_marginTop="36dp"
+        app:color="@color/colorPrimary"
+        app:text="12"
+        app:textColor="@color/colorPrimary"
+        app:textSize="16sp" />
+
+    <SeekBar
+        android:theme="@style/SeekBar.Style"
+        android:layout_gravity="center"
+        android:id="@+id/circular_progress_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp" />
+
+    <Button
+        android:layout_gravity="center"
+        android:id="@+id/circular_progress_wait_animation_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="等待动画" />
+
+</LinearLayout>
