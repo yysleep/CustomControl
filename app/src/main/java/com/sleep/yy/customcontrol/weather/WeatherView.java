@@ -44,14 +44,18 @@ public class WeatherView extends View {
     private float mRadius03;
     private float mRadius04;
 
-
-    private float mSunRadius;
     private float mDisSunRadius;
     private float mDisSunRing;
     private float mSweepAngle;
     private float mStartAngle;
+
+    private float mSunRadius;
+
     private float mSunRect;
     private float mRectRotate;
+
+    private float mShadowRadius;
+    private Paint mShadowPaint;
 
 
     private AnimatorSet mAnimatorSet;
@@ -102,11 +106,13 @@ public class WeatherView extends View {
         mSunRingPaint.setColor(getResources().getColor(R.color.yellow));
         mSunRingPaint.setStyle(Paint.Style.STROKE);
 
+        mShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mShadowPaint.setColor(getResources().getColor(R.color.gray));
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), 3 * MeasureSpec.getSize(widthMeasureSpec) / 4);
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), 4 * MeasureSpec.getSize(heightMeasureSpec) / 5);
     }
 
     @Override
@@ -117,6 +123,7 @@ public class WeatherView extends View {
         drawDisappearedSun(canvas);
         drawRing(canvas);
         drawSun(canvas);
+        drawShadow(canvas);
         drawCloud(canvas);
     }
 
@@ -188,7 +195,7 @@ public class WeatherView extends View {
 
     private void drawSun(Canvas canvas) {
         // draw sun
-        if (mSunRadius == 0 ) {
+        if (mSunRadius == 0) {
             return;
         }
         if (mSunRadius < 0) {
@@ -199,6 +206,19 @@ public class WeatherView extends View {
         mSunPath.reset();
         mSunPath.addCircle(mSunPoint.x, mSunPoint.y, mSunRadius, Path.Direction.CW);
         canvas.drawPath(mSunPath, mSunPaint);
+        canvas.restore();
+    }
+
+    private void drawShadow(Canvas canvas) {
+        // draw shadow
+        if (mShadowRadius == 0) {
+            return;
+        }
+        if (mShadowRadius < 0) {
+            mShadowRadius = 0;
+        }
+        canvas.save();
+        canvas.drawArc(mSunPoint.x - 100 - mShadowRadius, mSunPoint.y + 600, mSunPoint.x + 100 + mShadowRadius, mSunPoint.y + 635, 0, 360, true, mShadowPaint);
         canvas.restore();
     }
 
@@ -235,10 +255,6 @@ public class WeatherView extends View {
         canvas.restore();
     }
 
-    private void drawTest(Canvas canvas) {
-
-    }
-
     public void setDisSunRadius(float radius) {
         if (radius == 0) {
             mDisSunRing = 0;
@@ -259,6 +275,11 @@ public class WeatherView extends View {
 
     public void setSunRect(float sunRect) {
         mSunRect = sunRect;
+        invalidate();
+    }
+
+    public void setShadow(float shadow) {
+        mShadowRadius = shadow;
         invalidate();
     }
 
@@ -335,6 +356,10 @@ public class WeatherView extends View {
         rectRotateAnimator.setRepeatCount(ValueAnimator.INFINITE);
         rectRotateAnimator.setRepeatMode(ValueAnimator.RESTART);
 
+        ObjectAnimator shadow = ObjectAnimator.ofFloat(this, "shadow", 200);
+        //sunRect.setInterpolator(new LinearInterpolator());
+        shadow.setDuration(300);
+
         ObjectAnimator cloudAnimator = ObjectAnimator.ofFloat(this, "cloudRadius", 100);
         cloudAnimator.setDuration(800);
 
@@ -345,7 +370,8 @@ public class WeatherView extends View {
         mAnimatorSet.play(ring).after(sunDisappear);
         mAnimatorSet.play(sunEnlarge01).after(ring);
         mAnimatorSet.play(sunRect).after(sunEnlarge01);
-        mAnimatorSet.play(rectRotateAnimator).after(sunRect);
+        mAnimatorSet.play(shadow).with(sunRect);
+        mAnimatorSet.play(rectRotateAnimator).after(shadow);
         mAnimatorSet.play(cloudAnimator).with(rectRotateAnimator);
         mAnimatorSet.start();
     }
@@ -358,5 +384,6 @@ public class WeatherView extends View {
         setSunRadius(-1);
         setSunRect(-1);
         setRectRotate(-1);
+        setShadow(-1);
     }
 }

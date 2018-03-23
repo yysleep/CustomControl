@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
 
 import com.sleep.yy.customcontrol.R;
 import com.sleep.yy.customcontrol.base.BaseActivity;
-import com.sleep.yy.customcontrol.camera.CameraView;
 
 /**
  * Created by YySleep on 2018/3/22.
