@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_toolbar" />
+
+    <com.sleep.yy.customcontrol.gesture.GestureView
+        android:id="@+id/gesture_v"
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="36dp" />
+
+    <SeekBar
+        android:id="@+id/gesture_red_sb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:theme="@style/SeekBar.Style" />
+
+</LinearLayout>

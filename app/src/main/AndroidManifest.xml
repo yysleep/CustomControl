@@ -27,6 +27,7 @@
         <activity android:name=".geometry.GeometryActivity" />
         <activity android:name=".camera.CameraActivity" />
         <activity android:name=".weather.WeatherActivity" />
+        <activity android:name=".gesture.GestureActivity"/>
     </application>
 
 </manifest>

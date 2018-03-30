@@ -12,6 +12,7 @@ import com.sleep.yy.customcontrol.circular.CircularProgressActivity;
 import com.sleep.yy.customcontrol.R;
 import com.sleep.yy.customcontrol.geometry.GeometryActivity;
 import com.sleep.yy.customcontrol.camera.CameraActivity;
+import com.sleep.yy.customcontrol.gesture.GestureActivity;
 import com.sleep.yy.customcontrol.pie.PieChartActivity;
 import com.sleep.yy.customcontrol.weather.WeatherActivity;
 
@@ -48,6 +49,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mAdapter.list.add(new MainModel("GeometryView", GeometryActivity.class));
         mAdapter.list.add(new MainModel("CameraView", CameraActivity.class));
         mAdapter.list.add(new MainModel("WeatherView", WeatherActivity.class));
+        mAdapter.list.add(new MainModel("GestureView", GestureActivity.class));
         mAdapter.setOnItemClickListener(new MainRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
