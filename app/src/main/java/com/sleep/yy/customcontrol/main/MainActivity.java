@@ -44,12 +44,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void init() {
         mAdapter = new MainRecyclerViewAdapter();
-        mAdapter.list.add(new MainModel("CircularProgressView", CircularProgressActivity.class));
-        mAdapter.list.add(new MainModel("PieChartView", PieChartActivity.class));
-        mAdapter.list.add(new MainModel("GeometryView", GeometryActivity.class));
-        mAdapter.list.add(new MainModel("CameraView", CameraActivity.class));
-        mAdapter.list.add(new MainModel("WeatherView", WeatherActivity.class));
-        mAdapter.list.add(new MainModel("GestureView", GestureActivity.class));
+        mAdapter.list.add(new MainModel("圆形进度条", CircularProgressActivity.class));
+        mAdapter.list.add(new MainModel("饼图", PieChartActivity.class));
+        mAdapter.list.add(new MainModel("几何变化", GeometryActivity.class));
+        mAdapter.list.add(new MainModel("翻页效果", CameraActivity.class));
+        mAdapter.list.add(new MainModel("小太阳", WeatherActivity.class));
+        mAdapter.list.add(new MainModel("手势反馈", GestureActivity.class));
         mAdapter.setOnItemClickListener(new MainRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
