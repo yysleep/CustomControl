@@ -11,7 +11,7 @@
   
   ![image](https://github.com/yysleep/CustomControl/blob/master/display/002.png)
   
-  * GeometryView: 自定义几何变换View
+  * RulerView: 标尺View
   
   ![image](https://github.com/yysleep/CustomControl/blob/master/display/003.png)
   
