@@ -28,6 +28,7 @@
         <activity android:name=".camera.CameraActivity" />
         <activity android:name=".weather.WeatherActivity" />
         <activity android:name=".gesture.GestureActivity"/>
+        <activity android:name=".ruler.RulerActivity"/>
     </application>
 
 </manifest>

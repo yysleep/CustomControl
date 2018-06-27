@@ -14,6 +14,8 @@ import com.sleep.yy.customcontrol.geometry.GeometryActivity;
 import com.sleep.yy.customcontrol.camera.CameraActivity;
 import com.sleep.yy.customcontrol.gesture.GestureActivity;
 import com.sleep.yy.customcontrol.pie.PieChartActivity;
+import com.sleep.yy.customcontrol.ruler.RulerActivity;
+import com.sleep.yy.customcontrol.ruler.RulerView;
 import com.sleep.yy.customcontrol.weather.WeatherActivity;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -46,7 +48,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mAdapter = new MainRecyclerViewAdapter();
         mAdapter.list.add(new MainModel("圆形进度条", CircularProgressActivity.class));
         mAdapter.list.add(new MainModel("饼图", PieChartActivity.class));
-        mAdapter.list.add(new MainModel("几何变化", GeometryActivity.class));
+        //mAdapter.list.add(new MainModel("几何变化", GeometryActivity.class));
+        mAdapter.list.add(new MainModel("尺子", RulerActivity.class));
         mAdapter.list.add(new MainModel("翻页效果", CameraActivity.class));
         mAdapter.list.add(new MainModel("小太阳", WeatherActivity.class));
         mAdapter.list.add(new MainModel("手势反馈", GestureActivity.class));
