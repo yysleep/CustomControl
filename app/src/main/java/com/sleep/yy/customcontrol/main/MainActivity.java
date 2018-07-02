@@ -1,7 +1,6 @@
 package com.sleep.yy.customcontrol.main;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,17 +9,15 @@ import android.view.View;
 import com.sleep.yy.customcontrol.base.BaseActivity;
 import com.sleep.yy.customcontrol.circular.CircularProgressActivity;
 import com.sleep.yy.customcontrol.R;
-import com.sleep.yy.customcontrol.geometry.GeometryActivity;
 import com.sleep.yy.customcontrol.camera.CameraActivity;
 import com.sleep.yy.customcontrol.gesture.GestureActivity;
 import com.sleep.yy.customcontrol.pie.PieChartActivity;
 import com.sleep.yy.customcontrol.ruler.RulerActivity;
-import com.sleep.yy.customcontrol.ruler.RulerView;
 import com.sleep.yy.customcontrol.weather.WeatherActivity;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
-    private MainRecyclerViewAdapter mAdapter;
+    private DefaultRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +42,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void init() {
-        mAdapter = new MainRecyclerViewAdapter();
+        mAdapter = new DefaultRecyclerViewAdapter();
         mAdapter.list.add(new MainModel("圆形进度条", CircularProgressActivity.class));
         mAdapter.list.add(new MainModel("饼图", PieChartActivity.class));
         //mAdapter.list.add(new MainModel("几何变化", GeometryActivity.class));
-        mAdapter.list.add(new MainModel("尺子", RulerActivity.class));
+        mAdapter.list.add(new MainModel("标尺", RulerActivity.class));
         mAdapter.list.add(new MainModel("翻页效果", CameraActivity.class));
         mAdapter.list.add(new MainModel("小太阳", WeatherActivity.class));
         mAdapter.list.add(new MainModel("手势反馈", GestureActivity.class));
-        mAdapter.setOnItemClickListener(new MainRecyclerViewAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new DefaultRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 if (mAdapter.list.size() < position) {
@@ -68,7 +65,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initView() {
         RecyclerView rv = findViewById(R.id.main_rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.addItemDecoration(new DefaultDividerItemDecoration(this, DefaultDividerItemDecoration.VERTICAL_LIST));
+        //rv.addItemDecoration(new DefaultItemDecoration());
         rv.setAdapter(mAdapter);
 
     }

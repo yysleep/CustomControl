@@ -17,14 +17,14 @@ import java.util.List;
  * @author YySleep
  */
 
-public class MainRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final static String TAG = "MainRecyclerViewAdapter";
+public class DefaultRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final static String TAG = "DefaultRecyclerViewAdapter";
     private final static int VIEW_TYPE_01 = 1;
 
     public List<MainModel> list;
     private OnItemClickListener mItemClickListener;
 
-    public MainRecyclerViewAdapter() {
+    public DefaultRecyclerViewAdapter() {
         list = new ArrayList<>();
     }
 
@@ -82,7 +82,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         public MainViewHolder(View itemView) {
             super(itemView);
             mV = itemView.findViewById(R.id.item_main_v);
-            mTvTitle = itemView.findViewById(R.id.item_main_tv);
+            mTvTitle = itemView.findViewById(R.id.item_main_tv);;
         }
     }
 
