@@ -76,6 +76,7 @@ public class ChartView extends BaseView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        reset();
         calculateTimeSize();
         drawMpa(canvas);
         drawAxisLine(canvas);
@@ -127,5 +128,10 @@ public class ChartView extends BaseView {
         }
 
         canvas.drawPath(mDataLinePath, mDataPathPaint);
+    }
+
+    private void reset() {
+        mAxisLinePath.reset();
+        mDataLinePath.reset();
     }
 }
