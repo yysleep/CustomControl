@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.sleep.yy.customcontrol.base.BaseActivity;
+import com.sleep.yy.customcontrol.chart.ChartActivity;
 import com.sleep.yy.customcontrol.circular.CircularProgressActivity;
 import com.sleep.yy.customcontrol.R;
 import com.sleep.yy.customcontrol.camera.CameraActivity;
@@ -49,6 +50,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mAdapter.list.add(new MainModel("标尺", RulerActivity.class));
         mAdapter.list.add(new MainModel("翻页效果", CameraActivity.class));
         mAdapter.list.add(new MainModel("小太阳", WeatherActivity.class));
+        mAdapter.list.add(new MainModel("图表", ChartActivity.class));
         mAdapter.list.add(new MainModel("手势反馈", GestureActivity.class));
         mAdapter.setOnItemClickListener(new DefaultRecyclerViewAdapter.OnItemClickListener() {
             @Override
