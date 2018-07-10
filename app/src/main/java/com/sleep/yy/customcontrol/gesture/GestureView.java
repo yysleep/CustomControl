@@ -5,8 +5,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 
+import com.sleep.yy.customcontrol.base.BaseView;
 import com.sleep.yy.customcontrol.util.LogUtil;
 
 /**
@@ -15,28 +15,28 @@ import com.sleep.yy.customcontrol.util.LogUtil;
  * @author YySleep
  */
 
-public class GestureView extends View implements GestureDetector.OnGestureListener{
+public class GestureView extends BaseView implements GestureDetector.OnGestureListener{
 
     private static final String TAG = "GestureView";
 
     public GestureView(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public GestureView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public GestureView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+        super(context, attrs, defStyleAttr);
     }
 
     public GestureView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
     }
 
-    private void init() {
+    @Override
+    protected void init() {
         setClickable(true);
     }
 

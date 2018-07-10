@@ -9,7 +9,7 @@
 
     <com.sleep.yy.customcontrol.camera.CameraView
         android:id="@+id/camera_v"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:layout_marginTop="36dp" />

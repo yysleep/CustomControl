@@ -12,10 +12,10 @@ import android.graphics.Point;
 import android.graphics.Shader;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.sleep.yy.customcontrol.R;
+import com.sleep.yy.customcontrol.base.BaseView;
 import com.sleep.yy.customcontrol.util.LogUtil;
 
 /**
@@ -24,7 +24,7 @@ import com.sleep.yy.customcontrol.util.LogUtil;
  * @author YySleep
  */
 
-public class WeatherView extends View {
+public class WeatherView extends BaseView {
 
     private final static String TAG = "WeatherView";
 
@@ -56,28 +56,26 @@ public class WeatherView extends View {
 
     private float mShadowRadius;
     private Paint mShadowPaint;
-
-
     private AnimatorSet mAnimatorSet;
 
     public WeatherView(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public WeatherView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public WeatherView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+        super(context, attrs, defStyleAttr);
     }
 
     public WeatherView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
     }
 
-    private void init() {
+    @Override
+    protected void init() {
         mCloudPoint = new Point(500, 350);
         mSunPoint = new Point(450, 350);
 

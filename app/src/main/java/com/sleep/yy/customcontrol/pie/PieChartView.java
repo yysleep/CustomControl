@@ -7,9 +7,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 
 import com.sleep.yy.customcontrol.R;
+import com.sleep.yy.customcontrol.base.BaseView;
 import com.sleep.yy.customcontrol.util.LogUtil;
 
 
@@ -19,7 +19,7 @@ import com.sleep.yy.customcontrol.util.LogUtil;
  * @author YySleep
  */
 
-public class PieChartView extends View {
+public class PieChartView extends BaseView {
 
     private final static String TAG = "TestView";
     private Paint mPathPaint;
@@ -31,31 +31,29 @@ public class PieChartView extends View {
     private Paint mPaint05;
 
     private Path mPath;
-    private int mWidth;
-    private int mHeight;
     private int mQuadX;
     private int mRedSweepAngle = 140;
     private int mYellowStartAngle = 320;
     private int mYellowSweepAngle = 40;
 
     public PieChartView(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public PieChartView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public PieChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+        super(context, attrs, defStyleAttr);
     }
 
     public PieChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
     }
 
-    private void init() {
+    @Override
+    protected void init() {
         mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPathPaint.setStyle(Paint.Style.STROKE);
         mPathPaint.setColor(Color.BLUE);
@@ -79,28 +77,8 @@ public class PieChartView extends View {
 
         mPaint05 = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint05.setColor(getResources().getColor(R.color.blue));
-    }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        if (widthMode == MeasureSpec.EXACTLY || widthMode == MeasureSpec.AT_MOST) {
-            mWidth = widthSize - getPaddingStart() - getPaddingEnd();
-        } else {
-            mWidth = 150;
-        }
-
-        if (heightMode == MeasureSpec.EXACTLY || heightMode == MeasureSpec.AT_MOST) {
-            mHeight = heightSize - getPaddingTop() - getPaddingBottom();
-        } else {
-            mHeight = 150;
-        }
-        setMeasuredDimension(mWidth, mHeight);
-        LogUtil.d(TAG, "[onMeasure] mWidth = " + mWidth);
+        setDefaultSize(150, 150);
     }
 
     @Override

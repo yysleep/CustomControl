@@ -11,12 +11,12 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
-import android.view.View;
 import android.widget.Scroller;
 
+import com.sleep.yy.customcontrol.base.BaseView;
 import com.sleep.yy.customcontrol.util.LogUtil;
 
-public class RulerView extends View {
+public class RulerView extends BaseView {
 
     private static final String TAG = "RulerView";
     private Paint mScalePaint;
@@ -27,9 +27,6 @@ public class RulerView extends View {
     private Scroller mScroller;
     private VelocityTracker mVTracker;
 
-    private int mWidth;
-    private int mHeight;
-
     private float mLastX = -1;
     private int mOffset;
     private int blank = 150;
@@ -38,23 +35,23 @@ public class RulerView extends View {
     private int maxCount = 50;
 
     public RulerView(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public RulerView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public RulerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+        super(context, attrs, defStyleAttr);
     }
 
     public RulerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
     }
 
-    private void init() {
+    @Override
+    protected void init() {
         setClickable(true);
         mScalePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mScalePaint.setColor(Color.BLACK);
@@ -69,26 +66,8 @@ public class RulerView extends View {
         mPoint = new Point();
 
         mScroller = new Scroller(getContext());
-    }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        mWidth = measureSize(widthMeasureSpec, 500);
-        mHeight = measureSize(heightMeasureSpec, 700);
-        setMeasuredDimension(mWidth, mHeight);
-        LogUtil.d(TAG, "onMeasure() --- mWidth = " + mWidth + " --- mHeight = " + mHeight);
-    }
-
-    private int measureSize(int spec, int defaultSize) {
-        int size = MeasureSpec.getSize(spec);
-        if (MeasureSpec.getMode(spec) != MeasureSpec.EXACTLY) {
-            if (size > defaultSize) {
-                size = defaultSize;
-            }
-        }
-        return size;
+        setDefaultSize(500, 700);
     }
 
     @Override

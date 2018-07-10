@@ -9,9 +9,9 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 
 import com.sleep.yy.customcontrol.R;
+import com.sleep.yy.customcontrol.base.BaseView;
 import com.sleep.yy.customcontrol.util.LogUtil;
 
 /**
@@ -20,7 +20,7 @@ import com.sleep.yy.customcontrol.util.LogUtil;
  * @author YySleep
  */
 
-public class GeometryView extends View {
+public class GeometryView extends BaseView {
     private final static String TAG = "GeometryView";
 
     private Paint mPaint;
@@ -32,23 +32,23 @@ public class GeometryView extends View {
     private int mBmpHeight;
 
     public GeometryView(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public GeometryView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public GeometryView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+        super(context, attrs, defStyleAttr);
     }
 
     public GeometryView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
     }
 
-    private void init() {
+    @Override
+    protected void init() {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPath01 = new Path();
         mPath02 = new Path();
@@ -65,6 +65,8 @@ public class GeometryView extends View {
 
         mPath02.setFillType(Path.FillType.INVERSE_WINDING);
         mPath02.addCircle(mPoint.x + mBmpWidth + 150, mPoint.y + mBmpHeight - 100, 100, Path.Direction.CW);
+
+        setDefaultSize(500, 500);
     }
 
     @Override

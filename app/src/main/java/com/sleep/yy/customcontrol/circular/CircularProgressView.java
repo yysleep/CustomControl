@@ -11,10 +11,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.sleep.yy.customcontrol.R;
+import com.sleep.yy.customcontrol.base.BaseView;
 import com.sleep.yy.customcontrol.util.LogUtil;
 
 /**
@@ -23,7 +23,7 @@ import com.sleep.yy.customcontrol.util.LogUtil;
  * @author YySleep
  */
 
-public class CircularProgressView extends View {
+public class CircularProgressView extends BaseView {
     private final static String TAG = "CircularProgressView";
     private final int PADDING = 4;
 
@@ -35,8 +35,6 @@ public class CircularProgressView extends View {
     private String mText;
     private int mTestSize;
 
-    private int mWidth;
-    private int mHeight;
     private AnimatorSet mAnimatorSet;
     private int mArcLeft = 0;
     private int mArcTop = 0;
@@ -60,6 +58,11 @@ public class CircularProgressView extends View {
         init(attrs);
     }
 
+    @Override
+    protected void init() {
+        setDefaultSize(150, 150);
+    }
+
     private void init(AttributeSet attrs) {
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.CircularProgressView);
         CharSequence c = typedArray.getText(R.styleable.CircularProgressView_text);
@@ -70,42 +73,21 @@ public class CircularProgressView extends View {
         mTestSize = typedArray.getDimensionPixelSize(R.styleable.CircularProgressView_textSize, 8);
         int textColor = typedArray.getColor(R.styleable.CircularProgressView_textColor, Color.BLACK);
         int progressColor = typedArray.getColor(R.styleable.CircularProgressView_color, Color.BLACK);
-
-
         mTestPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTestPaint.setTextSize(mTestSize);
         mTestPaint.setColor(textColor);
         mTestPaint.setTextAlign(Paint.Align.CENTER);
-
         mProgressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mProgressPaint.setColor(progressColor);
         mProgressPaint.setStyle(Paint.Style.STROKE);
         mProgressPaint.setStrokeWidth(PADDING);
-
         typedArray.recycle();
-
         startWaitingAnimation();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        if (widthMode == MeasureSpec.EXACTLY || widthMode == MeasureSpec.AT_MOST) {
-            mWidth = widthSize - getPaddingStart() - getPaddingEnd();
-        } else {
-            mWidth = 150;
-        }
-
-        if (heightMode == MeasureSpec.EXACTLY || heightMode == MeasureSpec.AT_MOST) {
-            mHeight = heightSize - getPaddingTop() - getPaddingBottom();
-        } else {
-            mHeight = 150;
-        }
-
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (mWidth > mHeight) {
             mArcLeft = PADDING + (mWidth - mHeight) / 2;
             mArcTop = PADDING;
@@ -118,7 +100,6 @@ public class CircularProgressView extends View {
             mArcBottom = mWidth - PADDING + (mHeight - mWidth) / 2;
         }
         setMeasuredDimension(mWidth, mHeight);
-        LogUtil.d(TAG, "[onMeasure]");
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.sleep.yy.customcontrol.weather;
 
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +27,14 @@ public class WeatherActivity extends BaseActivity{
 
     private void initView() {
         final WeatherView wv = findViewById(R.id.weather_v);
+        Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+            @Override
+            public boolean queueIdle() {
+                wv.startAnimation();
+                return false;
+            }
+        });
+
         Button btn = findViewById(R.id.weather_btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

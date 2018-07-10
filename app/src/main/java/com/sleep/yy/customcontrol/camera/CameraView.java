@@ -6,13 +6,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 
 import com.sleep.yy.customcontrol.R;
+import com.sleep.yy.customcontrol.base.BaseView;
 import com.sleep.yy.customcontrol.util.LogUtil;
 
 /**
@@ -21,7 +20,7 @@ import com.sleep.yy.customcontrol.util.LogUtil;
  * @author YySleep
  */
 
-public class CameraView extends View {
+public class CameraView extends BaseView {
     private final static String TAG = "GeometryView";
 
     private Paint mPaint;
@@ -33,23 +32,23 @@ public class CameraView extends View {
     private int mRotateX;
 
     public CameraView(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public CameraView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public CameraView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+        super(context, attrs, defStyleAttr);
     }
 
     public CameraView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
     }
 
-    private void init() {
+    @Override
+    protected void init() {
         mCamera = new Camera();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPoint = new Point(200, 200);
@@ -61,11 +60,8 @@ public class CameraView extends View {
 
         mBmpWidth = mBitmap.getWidth();
         mBmpHeight = mBitmap.getHeight();
-    }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(widthMeasureSpec) / 2);
+        setDefaultSize(mBmpWidth * 2, mBmpHeight * 2);
     }
 
     @Override
