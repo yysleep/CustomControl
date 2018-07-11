@@ -59,22 +59,21 @@ public class WeatherView extends BaseView {
     private AnimatorSet mAnimatorSet;
 
     public WeatherView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public WeatherView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public WeatherView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
     }
 
     public WeatherView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
     }
-
-    @Override
     protected void init() {
         mCloudPoint = new Point(500, 350);
         mSunPoint = new Point(450, 350);

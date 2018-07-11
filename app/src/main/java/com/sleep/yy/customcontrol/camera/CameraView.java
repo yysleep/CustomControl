@@ -32,22 +32,21 @@ public class CameraView extends BaseView {
     private int mRotateX;
 
     public CameraView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public CameraView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public CameraView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
     }
 
     public CameraView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
     }
-
-    @Override
     protected void init() {
         mCamera = new Camera();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

@@ -22,3 +22,7 @@
   * WeatherView: 一个天气 View ,主要用于展示天气动画
   
   ![image](https://github.com/yysleep/CustomControl/blob/master/display/005.png)
+
+  * ChartView: 检测图表数据(支持手势操作/目前只有拖动)
+
+  ![image](https://github.com/yysleep/CustomControl/blob/master/display/006.png)

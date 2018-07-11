@@ -32,22 +32,21 @@ public class GeometryView extends BaseView {
     private int mBmpHeight;
 
     public GeometryView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public GeometryView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public GeometryView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
     }
 
     public GeometryView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
     }
-
-    @Override
     protected void init() {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPath01 = new Path();

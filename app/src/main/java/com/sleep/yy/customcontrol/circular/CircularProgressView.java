@@ -58,12 +58,9 @@ public class CircularProgressView extends BaseView {
         init(attrs);
     }
 
-    @Override
-    protected void init() {
-        setDefaultSize(150, 150);
-    }
-
     private void init(AttributeSet attrs) {
+        setDefaultSize(150, 150);
+
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.CircularProgressView);
         CharSequence c = typedArray.getText(R.styleable.CircularProgressView_text);
         if (c != null) {
@@ -127,8 +124,8 @@ public class CircularProgressView extends BaseView {
             mAnimatorSet.end();
             mAnimatorSet = null;
         }
-        this.mProgress = progress;
-        this.mStartAngleProgress = 0;
+        mProgress = progress;
+        mStartAngleProgress = 0;
         mText = progress + "%";
         invalidate();
     }
@@ -137,8 +134,8 @@ public class CircularProgressView extends BaseView {
      * 该 API 用作等待动画，不可以删除
      */
     public void setWaitProgress(int progress) {
-        this.mProgress = progress;
-        this.mStartAngleProgress = 0;
+        mProgress = progress;
+        mStartAngleProgress = 0;
         mText = null;
         invalidate();
     }
@@ -161,7 +158,7 @@ public class CircularProgressView extends BaseView {
             @Override
             public void onAnimationEnd(Animator animation) {
                 LogUtil.d(TAG, "[onAnimationEnd]");
-                CircularProgressView.this.setRotation(0);
+                setRotation(0);
             }
 
             @Override

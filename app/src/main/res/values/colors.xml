@@ -15,4 +15,8 @@
     <color name="cloudGray">#e2e2e2</color>
     <color name="sunStartYellow">#d2ffec1e</color>
     <color name="sunEndYellow">#d2d49800</color>
+
+    <color name="chart_color">#6569d9</color>
+    <color name="chart_background_color">#3b3e9a</color>
+
 </resources>

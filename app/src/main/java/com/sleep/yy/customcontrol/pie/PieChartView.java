@@ -37,22 +37,22 @@ public class PieChartView extends BaseView {
     private int mYellowSweepAngle = 40;
 
     public PieChartView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public PieChartView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public PieChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
     }
 
     public PieChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
     }
 
-    @Override
     protected void init() {
         mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPathPaint.setStyle(Paint.Style.STROKE);
@@ -120,7 +120,7 @@ public class PieChartView extends BaseView {
         } else if (x > 100) {
             x = 100;
         }
-        this.mQuadX = x;
+        mQuadX = x;
         LogUtil.d(TAG, "[setQuadX] X = " + mWidth * mQuadX / 100);
         mPath.reset();
         invalidate();

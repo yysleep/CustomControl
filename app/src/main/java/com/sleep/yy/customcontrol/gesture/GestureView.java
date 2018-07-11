@@ -20,22 +20,22 @@ public class GestureView extends BaseView implements GestureDetector.OnGestureLi
     private static final String TAG = "GestureView";
 
     public GestureView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public GestureView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public GestureView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
     }
 
     public GestureView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
     }
 
-    @Override
     protected void init() {
         setClickable(true);
     }
