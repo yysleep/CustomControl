@@ -16,6 +16,7 @@ import com.sleep.yy.customcontrol.R;
 import com.sleep.yy.customcontrol.base.BaseView;
 import com.sleep.yy.customcontrol.util.LogUtil;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -43,6 +44,7 @@ public class ChartView extends BaseView {
     private int pointOffset;
     private float[] rawPoints;
     private float[] relPoints;
+    private ArrayList<Float> pointList;
     private int textSize;
     private int timeBlank;
     private int timeSize;
@@ -100,6 +102,8 @@ public class ChartView extends BaseView {
                 0.0F, 300.0F, 0.0F, 200.0F, 0.0F, 300.0F,
                 0.0F, 170.0F, 0.0F, 150.0F, 0.0F, 700.0F};
 
+        pointList = new ArrayList<>();
+
         setOnTouchControl(new Control());
         setDefaultSize(800, 1000);
 
@@ -150,14 +154,14 @@ public class ChartView extends BaseView {
     }
 
     private void calculateTimeSize() {
-        timeSize = (int) ("2018/1/18 23:15:30".length() * textSize / 2);
+        timeSize = "2018/1/18 23:15:30".length() * textSize / 2;
         timeSize = (int) Math.sqrt(timeSize * timeSize / 2) + 10;
     }
 
     private void drawBackground(Canvas canvas) {
         canvas.drawColor(context.getResources().getColor(R.color.chart_color));
         canvas.save();
-        canvas.clipRect(timeSize, paddingTop, textSize + (mWidth / timeBlank - 1) * timeBlank + 60, mHeight - timeSize - paddingBottom);
+        canvas.clipRect(timeSize, paddingTop, mWidth - timeSize + pointOffset, mHeight - timeSize - paddingBottom);
         canvas.drawColor(context.getResources().getColor(R.color.chart_background_color));
         canvas.restore();
     }
@@ -168,7 +172,7 @@ public class ChartView extends BaseView {
         mAxisLinePath.moveTo(point.x, point.y);
         point.y = (mHeight - timeSize - paddingBottom);
         mAxisLinePath.lineTo(point.x, point.y);
-        point.x = (textSize + (mWidth / timeBlank - 1) * timeBlank + 60);
+        point.x = mWidth - timeSize;
         mAxisLinePath.lineTo(point.x, point.y);
         canvas.drawPath(mAxisLinePath, mAxisPathPaint);
     }
@@ -185,34 +189,48 @@ public class ChartView extends BaseView {
 
     private void drawTime(Canvas canvas) {
         point.y = (mHeight - timeSize - paddingBottom + timeTextOffsetY);
-        int i = 0;
-        while (i < mWidth / timeBlank - 1) {
-            point.x = (timeSize + timeBlank * i + timeTextOffsetY);
+        int length = mWidth - timeSize * 2;
+        int start = 0;
+        int startX = timeSize + pointOffset;
+        if (dataOffset < -startX) {
+            start = -dataOffset / timeBlank - 1;
+        }
+
+        for (int i = start; i < rawPoints.length / 2; i++) {
+            point.x = startX + timeBlank * i + dataOffset;
+            if (point.x < timeSize - pointOffset) {
+                continue;
+            }
+            if (point.x > mWidth - timeSize) {
+                break;
+            }
             canvas.save();
             canvas.rotate(-45.0F, point.x, point.y);
             canvas.drawText("2018/1/18 23:15:30", point.x, point.y, mTextPaint);
             canvas.restore();
-            i++;
         }
     }
 
     private void drawData(Canvas canvas) {
         canvas.save();
-        canvas.clipRect(timeSize + 2, paddingTop, textSize + (mWidth / timeBlank - 1) * timeBlank + 60, mHeight - timeSize - paddingBottom);
+        canvas.clipRect(timeSize, paddingTop, mWidth - timeSize + pointOffset, mHeight - timeSize - paddingBottom);
+        drawDataLine(canvas);
+        drawDataPoints(canvas);
+        canvas.restore();
+    }
 
-        initPoints();
-        point.x = ((int) rawPoints[0]);
+    private void drawDataLine(Canvas canvas) {
+        int startX = timeSize + pointOffset;
         int start = 0;
-        int k = 0;
         boolean isFirst = true;
-        if (dataOffset < -point.x) {
+        if (dataOffset < -startX) {
             start = -dataOffset / timeBlank;
         }
         for (int i = start; i < rawPoints.length / 2; i++) {
-            point.x = ((int) (rawPoints[(i * 2)] + timeBlank * i + dataOffset));
+            point.x = startX + timeBlank * i + dataOffset;
             point.y = ((int) rawPoints[(i * 2 + 1)]);
             LogUtil.d(TAG, "drawData() --- point.x = " + point.x + " --- mWidth = " + mWidth);
-            if (point.x > mWidth + textSize) {
+            if (point.x > mWidth - timeSize + timeBlank) {
                 break;
             }
             if (isFirst) {
@@ -221,24 +239,25 @@ public class ChartView extends BaseView {
             } else {
                 mDataLinePath.lineTo(point.x, point.y);
             }
-
-            if (k * 2 < relPoints.length) {
-                relPoints[(k * 2)] = point.x;
-                relPoints[(k * 2 + 1)] = point.y;
-                k++;
-            }
+            pointList.add((float) point.x);
+            pointList.add((float) point.y);
         }
-        canvas.drawPath(mDataLinePath, mDataPathPaint);
 
-        if (rawPoints.length > 0) {
+        canvas.drawPath(mDataLinePath, mDataPathPaint);
+    }
+
+    private void drawDataPoints(Canvas canvas) {
+        initPoints();
+        if (relPoints != null && relPoints.length > 0) {
             canvas.drawPoints(relPoints, mPointPaint);
         }
-        canvas.restore();
     }
 
     private void reset() {
         mAxisLinePath.reset();
         mDataLinePath.reset();
+        pointList.clear();
+        relPoints = null;
     }
 
     private void addVelocityTracker(MotionEvent paramMotionEvent) {
@@ -265,7 +284,7 @@ public class ChartView extends BaseView {
     private void moveData(float x) {
         float distance = x - mLastX;
         if (mLastX >= 0.0F) {
-            int length = (rawPoints.length / 2 - 1) * timeBlank - mWidth + textSize * 2 + pointOffset;
+            int length = (rawPoints.length / 2 - 1) * timeBlank - (mWidth - timeSize * 2 - pointOffset);
             if (((dataOffset == 0) && (distance > 0)) || ((distance < 0) && (-dataOffset == length))) {
                 return;
             }
@@ -289,15 +308,13 @@ public class ChartView extends BaseView {
     }
 
     private void initPoints() {
-        int i = 0;
-        while (i < rawPoints.length) {
-            if (i % 2 == 0) {
-                rawPoints[i] = (timeSize + pointOffset);
-            }
-            i += 1;
+        int length = pointList.size();
+        if (length <= 0) {
+            return;
         }
-        if (relPoints == null) {
-            relPoints = new float[((mWidth - textSize * 2) / timeBlank + 1) * 2];
+        relPoints = new float[length];
+        for (int i = 0; i < length; i++) {
+            relPoints[i] = pointList.get(i);
         }
     }
 
