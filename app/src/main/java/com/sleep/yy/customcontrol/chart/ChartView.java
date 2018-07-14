@@ -17,7 +17,7 @@ import com.sleep.yy.customcontrol.base.BaseView;
 import com.sleep.yy.customcontrol.util.LogUtil;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
 
 /**
  * Created by YySleep on 2018/7/10
@@ -42,7 +42,6 @@ public class ChartView extends BaseView {
 
 
     private int pointOffset;
-    private float[] rawPoints;
     private float[] relPoints;
     private ArrayList<Float> pointList;
     private int textSize;
@@ -60,6 +59,8 @@ public class ChartView extends BaseView {
     private int paddingBottom;
     private int paddingLeft;
     private int paddingTop;
+    private int maxMpa = 1200;
+    private List<ChartData> dataList;
 
     public ChartView(Context context) {
         this(context, null);
@@ -80,6 +81,8 @@ public class ChartView extends BaseView {
 
     protected void init() {
 
+        dataList = new ArrayList<>();
+        pointList = new ArrayList<>();
         context = getContext();
         timeBlank = 100;
         textSize = 24;
@@ -91,18 +94,6 @@ public class ChartView extends BaseView {
         mpaTextOffsetX = 16;
         mLastX = -1.0F;
         maxIndex = 50;
-        rawPoints = new float[]{0.0F, 150.0F, 0.0F, 300.0F, 0.0F, 460.0F,
-                0.0F, 150.0F, 0.0F, 600.0F, 0.0F, 100.0F,
-                0.0F, 300.0F, 0.0F, 750.0F, 0.0F, 430.0F,
-                0.0F, 210.0F, 0.0F, 300.0F, 0.0F, 600.0F,
-                0.0F, 460.0F, 0.0F, 150.0F, 0.0F, 206.0F,
-                0.0F, 400.0F, 0.0F, 300.0F, 0.0F, 520.0F,
-                0.0F, 460.0F, 0.0F, 250.0F, 0.0F, 800.0F,
-                0.0F, 300.0F, 0.0F, 660.0F, 0.0F, 150.0F,
-                0.0F, 300.0F, 0.0F, 200.0F, 0.0F, 300.0F,
-                0.0F, 170.0F, 0.0F, 150.0F, 0.0F, 700.0F};
-
-        pointList = new ArrayList<>();
 
         setOnTouchControl(new Control());
         setDefaultSize(800, 1000);
@@ -139,6 +130,11 @@ public class ChartView extends BaseView {
         ViewConfiguration localViewConfiguration = ViewConfiguration.get(getContext());
         minFlingVelocity = localViewConfiguration.getScaledMinimumFlingVelocity();
         maxFlingVelocity = localViewConfiguration.getScaledMaximumFlingVelocity();
+    }
+
+    public void setDataList(List<ChartData> list) {
+        this.dataList = list;
+        postInvalidate();
     }
 
     @Override
@@ -189,14 +185,13 @@ public class ChartView extends BaseView {
 
     private void drawTime(Canvas canvas) {
         point.y = (mHeight - timeSize - paddingBottom + timeTextOffsetY);
-        int length = mWidth - timeSize * 2;
         int start = 0;
         int startX = timeSize + pointOffset;
         if (dataOffset < -startX) {
             start = -dataOffset / timeBlank - 1;
         }
 
-        for (int i = start; i < rawPoints.length / 2; i++) {
+        for (int i = start; i < dataList.size(); i++) {
             point.x = startX + timeBlank * i + dataOffset;
             if (point.x < timeSize - pointOffset) {
                 continue;
@@ -206,7 +201,7 @@ public class ChartView extends BaseView {
             }
             canvas.save();
             canvas.rotate(-45.0F, point.x, point.y);
-            canvas.drawText("2018/1/18 23:15:30", point.x, point.y, mTextPaint);
+            canvas.drawText(dataList.get(i).time, point.x, point.y, mTextPaint);
             canvas.restore();
         }
     }
@@ -226,9 +221,10 @@ public class ChartView extends BaseView {
         if (dataOffset < -startX) {
             start = -dataOffset / timeBlank;
         }
-        for (int i = start; i < rawPoints.length / 2; i++) {
+        int lineHeight = mHeight - paddingTop - timeSize - paddingBottom;
+        for (int i = start; i < dataList.size(); i++) {
             point.x = startX + timeBlank * i + dataOffset;
-            point.y = ((int) rawPoints[(i * 2 + 1)]);
+            point.y = lineHeight - lineHeight * dataList.get(i).mpa / maxMpa;
             LogUtil.d(TAG, "drawData() --- point.x = " + point.x + " --- mWidth = " + mWidth);
             if (point.x > mWidth - timeSize + timeBlank) {
                 break;
@@ -284,7 +280,7 @@ public class ChartView extends BaseView {
     private void moveData(float x) {
         float distance = x - mLastX;
         if (mLastX >= 0.0F) {
-            int length = (rawPoints.length / 2 - 1) * timeBlank - (mWidth - timeSize * 2 - pointOffset);
+            int length = (dataList.size() - 1) * timeBlank - (mWidth - timeSize * 2 - pointOffset);
             if (((dataOffset == 0) && (distance > 0)) || ((distance < 0) && (-dataOffset == length))) {
                 return;
             }
