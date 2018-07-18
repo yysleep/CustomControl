@@ -1,7 +1,7 @@
 ## CustomControl
 * 一个自定义控件/动画 库
 
-### 目前有五个
+### 目前有六个
   * CircularProgressView：圆形进度条，仿照原生 ProgressBar 的动画效果，并添加了圆形进度效果
   
   ![image](https://github.com/yysleep/CustomControl/blob/master/display/001.png)
